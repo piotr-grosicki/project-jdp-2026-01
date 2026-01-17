@@ -10,16 +10,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/groups")
-//odblokowac ten komentarz jak ktos doda serwis dla grupy
+//uncomment when GroupService added
 //@RequiredArgsConstructor
 public class GroupController {
 
-    //odblokowac ten komentarz jak ktos doda serwis dla grupy
+    //uncomment when GroupService added
     //private GroupService groupService;
 
     @GetMapping
     public ResponseEntity<List<GroupDto>> getAllGroups() {
-        return ResponseEntity.ok(List.of(new GroupDto(1L, "lista grup produktow")));
+        return ResponseEntity.ok(List.of(new GroupDto(1L, "groups list")));
     };
 
     @PostMapping
@@ -29,11 +29,11 @@ public class GroupController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GroupDto> getGroup(@PathVariable Long id) {
-        return ResponseEntity.ok(new GroupDto(id, "istniejaca grupa"));
+        return ResponseEntity.ok(new GroupDto(id, "existing group"));
     };
 
     @PutMapping("/{id}")
     public ResponseEntity<GroupDto> updateGroup(@PathVariable Long id) {
-        return ResponseEntity.ok(new GroupDto(id, "zaktualizowana grupa"));
+        return ResponseEntity.ok(new GroupDto(id, "updated group"));
     };
 }

@@ -2,9 +2,8 @@ package com.kodilla.ecommercee.dto;
 
 import jakarta.validation.constraints.Size;
 
-//dla PUT i dla POST obiekty DTO sa takie same, wiec nie ma sensu tworzenia
-//dwoch takich samych klas :)
+//put and get have use the same object (because of the same fields)
 public record CreateUpdateGroupDto(
-        @Size(min = 3, max = 200, message = "Nazwa grupy musi byc dluższa niż 3 znaki oraz krótsza niż 200 znaków")
+        @Size(min = 3, max = 200, message = "Group name must be between 3 and 200 characters long")
         String name) {
 }
