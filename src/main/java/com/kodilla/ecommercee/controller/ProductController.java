@@ -1,8 +1,9 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.dto.GroupDto;
 import com.kodilla.ecommercee.dto.ProductDto;
 import com.kodilla.ecommercee.mappper.ProductMapper;
-import com.kodilla.ecommercee.service.DbService;
+import com.kodilla.ecommercee.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +16,12 @@ import java.util.List;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
-    //private final DbService dbService;
-    //private final ProductMapper productMapper;
+     //private final ProductService productService;
+     //private final ProductMapper productMapper;
 
     @GetMapping
     public ResponseEntity<List<ProductDto>> getAllProducts() {
-        return ResponseEntity.ok(new ArrayList<>());
+        return ResponseEntity.ok(List.of(new ProductDto(1L, "P1", "D1", new BigDecimal(0), 1L)));
     }
 
     @GetMapping(value = "{id}")

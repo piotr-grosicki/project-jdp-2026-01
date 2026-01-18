@@ -21,10 +21,11 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     //validation package (for validating DTOs and/or entities)
-    implementation 'org.springframework.boot:spring-boot-starter-validation'//chyba nie podajemy wersji, jak jest w plugins management
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'com.h2database:h2'
+    testImplementation("com.google.code.gson:gson")
 }
 
 tasks.named('test') {
