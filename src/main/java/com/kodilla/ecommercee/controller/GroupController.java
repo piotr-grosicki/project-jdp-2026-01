@@ -33,7 +33,7 @@ public class GroupController {
     };
 
     @PutMapping("/{id}")
-    public ResponseEntity<GroupDto> updateGroup(@PathVariable Long id) {
-        return ResponseEntity.ok(new GroupDto(id, "updated group"));
+    public ResponseEntity<GroupDto> updateGroup(@PathVariable Long id, @RequestBody @Valid CreateUpdateGroupDto createUpdateGroupDto) {
+        return ResponseEntity.ok(new GroupDto(id, createUpdateGroupDto.name()));
     };
 }
