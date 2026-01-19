@@ -1,8 +1,6 @@
 package com.kodilla.ecommercee.controller;
 
 import com.kodilla.ecommercee.dto.ProductDto;
-import com.kodilla.ecommercee.mappper.ProductMapper;
-import com.kodilla.ecommercee.service.DbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +22,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "{id}")
-    public ResponseEntity<ProductDto> getProduct(@PathVariable Long id) throws ProductNotFoundException {
+    public ResponseEntity<ProductDto> getProduct(@PathVariable Long id) {
         return ResponseEntity.ok(new ProductDto(id,"P1", "D1", new BigDecimal(0), 1L));
     }
 
@@ -39,7 +37,7 @@ public class ProductController {
     }
 
     @DeleteMapping(value={"{id}"})
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) throws ProductNotFoundException {
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         return ResponseEntity.ok().build();
     }
 

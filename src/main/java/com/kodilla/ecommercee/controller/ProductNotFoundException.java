@@ -1,4 +1,9 @@
 package com.kodilla.ecommercee.controller;
 
-public class ProductNotFoundException extends Exception {
+import jakarta.persistence.EntityNotFoundException;
+
+public class ProductNotFoundException extends EntityNotFoundException {
+    public ProductNotFoundException() {
+        super("Product was not found");
+    }
 }
