@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "carts")
 @Getter
@@ -19,11 +21,11 @@ public class Cart {
     //@JoinColumn(name="USER_ID", nullable=false, unique=true)
     //private User user;
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(
-//            name = "CART_ITEMS",
-//            joinColumns = @JoinColumn(name = "CART_ID"),
-//            inverseJoinColumns = @JoinColumn(name = "PRODUCT_ID")
-//    )
-//    private List<Product> products;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "cart_items",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private List<Product> products;
 }
