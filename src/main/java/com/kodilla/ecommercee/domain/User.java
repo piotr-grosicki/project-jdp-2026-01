@@ -1,19 +1,19 @@
 package com.kodilla.ecommercee.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDateTime;
 
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Entity(name = "users")
+@Entity
+@Table(name = "users")
 public class User {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String email;
@@ -24,5 +24,5 @@ public class User {
 
     private String sessionKey;
 
-    private String sessionKeyExpiresAt;
+    private LocalDateTime sessionKeyExpiresAt;
 }
