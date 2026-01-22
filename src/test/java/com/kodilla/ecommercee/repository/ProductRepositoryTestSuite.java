@@ -18,10 +18,28 @@ public class ProductRepositoryTestSuite {
     @Autowired
     private GroupRepository groupRepository;
 
+    private Product createProduct(Group group) {
+        Product product = new Product(1L, "Some product", "Description", new BigDecimal("1.35"), group);
+        return productRepository.save(product);
+    };
+
+    private Group createGroup() {
+        Group group = new Group("Some group");
+        return groupRepository.save(group);
+    }
+
+    private void cleanUpProduct(Long productId) {
+        productRepository.deleteById(productId);
+    }
+
+    private void cleanUpGroup(Long groupId) {
+        groupRepository.deleteById(groupId);
+    };
+
     @Test
     public void testAddProductAndGetProduct() {
         //given
-        Product product = new Product(1L, "Some product", "Description", new BigDecimal("1.35"), null);
+        Product product = createProduct(null);
         //when
         productRepository.save(product);
         Optional<Product> productOptional = productRepository.findById(product.getId());
@@ -33,21 +51,50 @@ public class ProductRepositoryTestSuite {
         assertEquals(product.getGroup(), productSaved.getGroup());
         assertEquals(product.getName(), productSaved.getName());
         assertEquals(product.getPrice(), productSaved.getPrice());
+        //cleanup
+        cleanUpProduct(product.getId());
     }
 
     @Test
-    public void testAddGroupandGetGroup() {
+    public void testGetGroup() {
         //given
-        Group group = new Group("Some group");
-        groupRepository.save(group);
-        Product product = new Product(1L, "Some product", "Description", new BigDecimal("1.35"), group);
+        Group group = createGroup();
+        Product product = createProduct(group);
         //when
-        productRepository.save(product);
         Product productSaved = productRepository.findById(product.getId()).get();
         //then
         assertNotNull(productSaved.getGroup());
         Group groupSaved = productSaved.getGroup();
         assertEquals(group.getId(), groupSaved.getId());
         assertEquals(group.getName(), groupSaved.getName());
+        //cleanup
+        cleanUpProduct(product.getId());
+        cleanUpGroup(group.getId());
+    };
+
+    @Test
+    public void testUpdateProduct() {
+        //given
+        Product product = createProduct(null);
+        //when
+        product.setName("Some new name");
+        productRepository.save(product);
+        Product productUpdatedSaved = productRepository.findById(product.getId()).get();
+        //then
+        assertEquals(product.getId(), productUpdatedSaved.getId());
+        assertEquals(product.getName(), productUpdatedSaved.getName());
+        //cleanup
+        cleanUpProduct(product.getId());
+    };
+
+    @Test
+    public void testDeleteProduct() {
+        //given
+        Product product = createProduct(null);
+        //when
+        productRepository.deleteById(product.getId());
+        Optional<Product> productDeleted = productRepository.findById(product.getId());
+        //then
+        assertTrue(productDeleted.isEmpty());
     };
 }
