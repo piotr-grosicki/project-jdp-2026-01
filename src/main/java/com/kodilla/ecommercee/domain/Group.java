@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity(name = "PRODUCTS_GROUPS")
+@Entity(name = "groups")
 public class Group {
 
     public Group(String name) {
