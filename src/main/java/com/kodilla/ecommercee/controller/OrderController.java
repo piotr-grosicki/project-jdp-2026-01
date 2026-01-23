@@ -39,13 +39,13 @@ public class OrderController {
         if (orderId == null || orderId <= 0) {
             throw new OrderNotFoundException(orderId);
         }
-        OrderDto updatedOrder = new OrderDto(orderId, orderDto.getStatus());
+        OrderDto updatedOrder = new OrderDto(orderId, orderDto.status());
         return ResponseEntity.ok(updatedOrder);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
-        OrderDto createdOrder = new OrderDto(); // We create empty order. To be revised later.
+        OrderDto createdOrder = new OrderDto(1L, "CREATED"); // We create empty order. To be revised later.
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 }
