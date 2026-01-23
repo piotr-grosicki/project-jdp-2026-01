@@ -26,8 +26,7 @@ public class Group {
     @Column(name = "name", nullable = false)
     private String name;
 
-   @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-   private List<Product> products;
-
+    @OneToMany (mappedBy = "group", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Product> products;
 
 }
