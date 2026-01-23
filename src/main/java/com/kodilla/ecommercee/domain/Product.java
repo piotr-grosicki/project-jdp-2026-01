@@ -1,15 +1,15 @@
 package com.kodilla.ecommercee.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
+@Builder
 @Entity
 @Table(name = "products")
 public class Product {

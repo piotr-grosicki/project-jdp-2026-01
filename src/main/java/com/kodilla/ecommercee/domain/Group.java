@@ -2,15 +2,14 @@ package com.kodilla.ecommercee.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 @Entity(name = "'groups'")
 public class Group {
     @Id
@@ -21,9 +20,4 @@ public class Group {
     @NotNull
     @Column(name = "name")
     private String name;
-
-   //@OneToMany(mappedBy = "group", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //private List<Product> products;
-
-
 }
