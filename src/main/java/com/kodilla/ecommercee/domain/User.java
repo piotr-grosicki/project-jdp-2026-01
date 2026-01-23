@@ -2,7 +2,9 @@ package com.kodilla.ecommercee.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
+import java.util.*;
 
 
 @Data
@@ -25,4 +27,22 @@ public class User {
     private String sessionKey;
 
     private LocalDateTime sessionKeyExpiresAt;
+
+    @OneToMany(
+            targetEntity = Cart.class,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<Cart> carts =  new ArrayList<>();
+    /*
+    @OneToMany(
+            targetEntity = Order.class,
+            mappedBy = "user",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    private List<Order> orders =  new ArrayList<>();
+
+     */
 }
