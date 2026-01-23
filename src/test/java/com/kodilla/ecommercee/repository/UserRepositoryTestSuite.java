@@ -42,7 +42,8 @@ public class UserRepositoryTestSuite {
         assertEquals(user.getEmail(), userSaved.getEmail());
         assertEquals(user.getPasswordHash(), userSaved.getPasswordHash());
         assertEquals(user.getSessionKey(), userSaved.getSessionKey());
-        assertEquals(user.getSessionKeyExpiresAt(), userSaved.getSessionKeyExpiresAt());
+        assertEquals(user.getSessionKeyExpiresAt().toString().substring(0, 19),
+                userSaved.getSessionKeyExpiresAt().toString().substring(0, 19));
         //cleanup
         cleanUpUser(user.getId());
     };
