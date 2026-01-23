@@ -70,12 +70,15 @@ public class ProductRepositoryTestSuite {
     public void testDeleteProduct() {
         //given
         Product product = createProduct();
+        Group group = product.getGroup();
         Long productId = product.getId();
         //when
         productRepository.deleteById(product.getId());
         Optional<Product> productDeleted = productRepository.findById(productId);
+        Optional<Group> groupFromDeletedProduct = groupRepository.findById(group.getId());
         //then
         assertTrue(productDeleted.isEmpty());
+        assertTrue(groupFromDeletedProduct.isPresent());
     };
 
     @Test
