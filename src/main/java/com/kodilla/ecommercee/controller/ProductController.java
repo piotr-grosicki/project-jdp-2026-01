@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
-    //private final DbService dbService;
+
     //private final ProductMapper productMapper;
 
     @GetMapping
@@ -22,7 +22,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "{id}")
-    public ResponseEntity<ProductDto> getProduct(@PathVariable Long id) {
+    public ResponseEntity<ProductDto> getProduct(@PathVariable Long id) throws ProductNotFoundException {
         return ResponseEntity.ok(new ProductDto(id,"P1", "D1", new BigDecimal(0), 1L));
     }
 
@@ -36,8 +36,8 @@ public class ProductController {
         return ResponseEntity.ok(new ProductDto(1L, "P1", "D1", new BigDecimal(0), 1L));
     }
 
-    @DeleteMapping(value={"{id}"})
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+    @DeleteMapping(value="{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) throws ProductNotFoundException {
         return ResponseEntity.ok().build();
     }
 
