@@ -2,11 +2,14 @@ package com.kodilla.ecommercee.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "orders")
-@Getter
+@Entity
+@Table(name = "orders")
+@Builder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {

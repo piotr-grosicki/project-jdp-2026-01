@@ -4,19 +4,17 @@ import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.repository.OrderRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
+@DataJpaTest
 class OrderRepositoryTestSuite {
 
     @Autowired
@@ -28,9 +26,16 @@ class OrderRepositoryTestSuite {
     private User testUser;
 
     @BeforeEach
+
     void setUp() {
-        testUser = new User(null, "test@example.com", "pass", false, null, null);
-        userRepository.save(testUser);
+        testUser = new User(
+                null,
+                "test@example.com",
+                "pass",
+                false,
+                null,
+                null); //To be changed to builder one User has proper annotation.
+        userRepository.save(testUser); //userRepository.save(testUser) to be changed to userRepository.saveAndFlush(testUser) one UserRepository updated.
     }
 
     @Test
