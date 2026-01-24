@@ -34,15 +34,6 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{orderId}")
-    public ResponseEntity<OrderDto> updateOrder(@PathVariable Long orderId, @RequestBody OrderDto orderDto) {
-        if (orderId == null || orderId <= 0) {
-            throw new OrderNotFoundException(orderId);
-        }
-        OrderDto updatedOrder = new OrderDto(orderId, orderDto.getStatus());
-        return ResponseEntity.ok(updatedOrder);
-    }
-
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
         OrderDto createdOrder = new OrderDto(); // We create empty order. To be revised later.
