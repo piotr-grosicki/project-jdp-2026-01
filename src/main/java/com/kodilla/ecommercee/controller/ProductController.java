@@ -21,7 +21,7 @@ public class ProductController {
         return ResponseEntity.ok(new ArrayList<>());
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable Long id) throws ProductNotFoundException {
         return ResponseEntity.ok(new ProductDto(id,"P1", "D1", new BigDecimal(0), 1L));
     }
@@ -31,18 +31,14 @@ public class ProductController {
         return ResponseEntity.ok(new ProductDto(1L, "P1", "D1", new BigDecimal(0), 1L));
     }
 
-    @PutMapping
-    public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto) {
-        return ResponseEntity.ok(new ProductDto(1L, "P1", "D1", new BigDecimal(0), 1L));
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) throws ProductNotFoundException {
+        return ResponseEntity.ok(new ProductDto(id, "P1", "D1", new BigDecimal(0), 1L));
     }
 
-    @DeleteMapping(value="{id}")
+    @DeleteMapping(value="/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) throws ProductNotFoundException {
         return ResponseEntity.ok().build();
     }
-
-
-
-
 
 }
