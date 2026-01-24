@@ -44,7 +44,7 @@ class OrderRepositoryTestSuite {
         Order order = new Order(null, "CREATED", testUser);
 
         //When
-        Order savedOrder = orderRepository.save(order);
+        Order savedOrder = orderRepository.saveAndFlush(order);
 
         //Then
         assertNotNull(savedOrder.getId());
@@ -54,7 +54,7 @@ class OrderRepositoryTestSuite {
     @Test
     void testGetOrder() {
         //Given
-        Order order = orderRepository.save(new Order(null, "CREATED", testUser));
+        Order order = orderRepository.saveAndFlush(new Order(null, "CREATED", testUser));
 
         //When
         Optional<Order> fetchedOrder = orderRepository.findById(order.getId());
@@ -67,8 +67,8 @@ class OrderRepositoryTestSuite {
     @Test
     void testGetAllOrders() {
         //Given
-        orderRepository.save(new Order(null, "CREATED", testUser));
-        orderRepository.save(new Order(null, "PAID", testUser));
+        orderRepository.saveAndFlush(new Order(null, "CREATED", testUser));
+        orderRepository.saveAndFlush(new Order(null, "PAID", testUser));
 
         //When
         List<Order> orders = orderRepository.findAll();
@@ -80,11 +80,11 @@ class OrderRepositoryTestSuite {
     @Test
     void testUpdateOrder() {
         //Given
-        Order order = orderRepository.save(new Order(null, "CREATED", testUser));
+        Order order = orderRepository.saveAndFlush(new Order(null, "CREATED", testUser));
 
         //When
         Order orderToUpdate = new Order(order.getId(), "PAID", testUser);
-        orderRepository.save(orderToUpdate);
+        orderRepository.saveAndFlush(orderToUpdate);
 
         //Then
         Order updatedOrder = orderRepository.findById(order.getId()).orElseThrow();
@@ -94,7 +94,7 @@ class OrderRepositoryTestSuite {
     @Test
     void testDeleteOrder() {
         //Given
-        Order order = orderRepository.save(new Order(null, "CREATED", testUser));
+        Order order = orderRepository.saveAndFlush(new Order(null, "CREATED", testUser));
         Long id = order.getId();
 
         //When
@@ -107,7 +107,7 @@ class OrderRepositoryTestSuite {
     @Test
     void testOrderUserRelation() {
         //Given
-        Order order = orderRepository.save(new Order(null, "CREATED", testUser));
+        Order order = orderRepository.saveAndFlush(new Order(null, "CREATED", testUser));
         Long orderId = order.getId();
         Long userId = testUser.getId();
 
