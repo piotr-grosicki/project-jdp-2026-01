@@ -22,12 +22,12 @@ public class CartController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CartDto> getCartById(@PathVariable Long id) {
+    public ResponseEntity<CartDto> getCartById(@PathVariable Long id) throws CartNotFoundException {
         return ResponseEntity.ok(new CartDto(id, 1L));
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<CartDto> getCartByUserId(@PathVariable Long id) {
+    public ResponseEntity<CartDto> getCartByUserId(@PathVariable Long id) throws CartNotFoundException {
         return ResponseEntity.ok(new CartDto(id, 1L));
     }
 
@@ -38,6 +38,9 @@ public class CartController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CartDto>  updateCart(@PathVariable Long id,@RequestBody CartDto cartDto) {
+        if (id == null || id <= 0) {
+            throw new OrderNotFoundException(id);
+        }
         return ResponseEntity.ok(new CartDto(id, 1L));
     }
 
