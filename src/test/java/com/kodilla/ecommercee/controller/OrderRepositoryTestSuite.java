@@ -28,14 +28,12 @@ class OrderRepositoryTestSuite {
     @BeforeEach
 
     void setUp() {
-        testUser = new User(
-                null,
-                "test@example.com",
-                "pass",
-                false,
-                null,
-                null); //To be changed to builder one User has proper annotation.
-        userRepository.save(testUser); //userRepository.save(testUser) to be changed to userRepository.saveAndFlush(testUser) one UserRepository updated.
+        testUser = User.builder()
+                .email("est@example.com")
+                .passwordHash("pass")
+                .isBlocked(false)
+                .build();
+        userRepository.saveAndFlush(testUser);
     }
 
     @Test
