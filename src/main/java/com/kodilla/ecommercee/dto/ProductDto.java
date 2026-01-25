@@ -1,6 +1,10 @@
 package com.kodilla.ecommercee.dto;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+
 import java.math.BigDecimal;
 
-public record ProductDto(Long id, String name, String description, BigDecimal price, Long  groupId) {
-}
+@Builder
+public record ProductDto (
+        Long id, @NotNull String name, String description, @NotNull BigDecimal price, Long groupId) {}
