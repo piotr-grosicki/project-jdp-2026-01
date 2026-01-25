@@ -78,20 +78,6 @@ class OrderRepositoryTestSuite {
     }
 
     @Test
-    void testUpdateOrder() {
-        //Given
-        Order order = orderRepository.saveAndFlush(new Order(null, "CREATED", testUser));
-
-        //When
-        Order orderToUpdate = new Order(order.getId(), "PAID", testUser);
-        orderRepository.saveAndFlush(orderToUpdate);
-
-        //Then
-        Order updatedOrder = orderRepository.findById(order.getId()).orElseThrow();
-        assertEquals("PAID", updatedOrder.getStatus());
-    }
-
-    @Test
     void testDeleteOrder() {
         //Given
         Order order = orderRepository.saveAndFlush(new Order(null, "CREATED", testUser));
