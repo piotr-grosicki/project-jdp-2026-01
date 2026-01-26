@@ -26,7 +26,6 @@ class OrderRepositoryTestSuite {
     private User testUser;
 
     @BeforeEach
-
     void setUp() {
         testUser = User.builder()
                 .email("est@example.com")
@@ -39,7 +38,10 @@ class OrderRepositoryTestSuite {
     @Test
     void testCreateOrder() {
         //Given
-        Order order = new Order(null, "CREATED", testUser);
+        Order order = Order.builder()
+                .status("CREATED")
+                .user(testUser)
+                .build();
 
         //When
         Order savedOrder = orderRepository.saveAndFlush(order);
@@ -52,21 +54,33 @@ class OrderRepositoryTestSuite {
     @Test
     void testGetOrder() {
         //Given
-        Order order = orderRepository.saveAndFlush(new Order(null, "CREATED", testUser));
+        Order order = Order.builder()
+                .status("CREATED")
+                .user(testUser)
+                .build();
+        Order savedOrder = orderRepository.saveAndFlush(order);
 
         //When
-        Optional<Order> fetchedOrder = orderRepository.findById(order.getId());
+        Optional<Order> fetchedOrder = orderRepository.findById(savedOrder.getId());
 
         //Then
         assertTrue(fetchedOrder.isPresent());
-        assertEquals(order.getId(), fetchedOrder.get().getId());
+        assertEquals(savedOrder.getId(), fetchedOrder.get().getId());
     }
 
     @Test
     void testGetAllOrders() {
         //Given
-        orderRepository.saveAndFlush(new Order(null, "CREATED", testUser));
-        orderRepository.saveAndFlush(new Order(null, "PAID", testUser));
+        Order createdOrder = Order.builder()
+                .status("CREATED")
+                .user(testUser)
+                .build();
+        Order paidOrder = Order.builder()
+                .status("CREATED")
+                .user(testUser)
+                .build();
+        Order savedOrder = orderRepository.saveAndFlush(createdOrder);
+        Order savedOrder2 = orderRepository.saveAndFlush(paidOrder);
 
         //When
         List<Order> orders = orderRepository.findAll();
@@ -78,7 +92,11 @@ class OrderRepositoryTestSuite {
     @Test
     void testDeleteOrder() {
         //Given
-        Order order = orderRepository.saveAndFlush(new Order(null, "CREATED", testUser));
+        Order order = Order.builder()
+                .id(1L)
+                .status("CREATED")
+                .user(testUser)
+                .build();
         Long id = order.getId();
 
         //When
@@ -91,7 +109,11 @@ class OrderRepositoryTestSuite {
     @Test
     void testOrderUserRelation() {
         //Given
-        Order order = orderRepository.saveAndFlush(new Order(null, "CREATED", testUser));
+        Order order = Order.builder()
+                .id(1L)
+                .status("CREATED")
+                .user(testUser)
+                .build();
         Long orderId = order.getId();
         Long userId = testUser.getId();
 
