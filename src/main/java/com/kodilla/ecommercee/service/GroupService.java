@@ -19,7 +19,7 @@ public class GroupService {
     }
 
     public Group getGroupById(final Long id) {
-        return groupRepository.findById(id).orElse(GroupNotFoundException::new);
+        return groupRepository.findById(id).orElseThrow(GroupNotFoundException::new);
     }
 
     public Group saveGroup(final Group group) {
