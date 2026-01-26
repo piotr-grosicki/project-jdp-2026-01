@@ -15,7 +15,7 @@ public class Cart {
     @Column(name = "id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="user_id", nullable=false, unique=true)
     private User user;
 
