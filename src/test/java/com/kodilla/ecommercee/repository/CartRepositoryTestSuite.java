@@ -31,8 +31,8 @@ public class CartRepositoryTestSuite {
 
     @BeforeEach
     public void beforeEach() {
-        savedUser = userRepository.save(new User());
-
+        savedUser = userRepository.save(User.builder().email("test@email.com")
+                .passwordHash("testPass").blocked(false).build());
         p1 = productRepository.save(Product.builder().name("P1").price(new BigDecimal(0)).build());
         Product p2 = productRepository.save(Product.builder().name("P2").price(new BigDecimal(0)).build());
         Product p3 = productRepository.save(Product.builder().name("P3").price(new BigDecimal(0)).build());
