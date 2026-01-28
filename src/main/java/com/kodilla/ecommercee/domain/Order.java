@@ -1,18 +1,16 @@
 package com.kodilla.ecommercee.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "ORDERS")
+@Table(name = "orders")
 @Builder
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
@@ -21,18 +19,18 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "STATUS")
+    @Column(name = "status")
     private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "JOIN_ORDER_PRODUCT",
-            joinColumns = {@JoinColumn(name = "ORDER_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "PRODUCT_ID")}
+            name = "join_order_product",
+            joinColumns = {@JoinColumn(name = "order_id")},
+            inverseJoinColumns = {@JoinColumn(name = "product_id")}
     )
     private List<Product> products = new ArrayList<>();
 }

@@ -1,14 +1,17 @@
 package com.kodilla.ecommercee.controller;
 
 import com.kodilla.ecommercee.domain.Order;
+import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.repository.OrderRepository;
+import com.kodilla.ecommercee.repository.ProductRepository;
 import com.kodilla.ecommercee.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,12 +21,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class OrderRepositoryTestSuite {
 
     @Autowired
+    ProductRepository productRepository;
+    @Autowired
     private OrderRepository orderRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     private User testUser;
+    private List<Product> testProducts;
 
     @BeforeEach
     void setUp() {
@@ -33,6 +37,18 @@ class OrderRepositoryTestSuite {
                 .isBlocked(false)
                 .build();
         userRepository.saveAndFlush(testUser);
+
+        Product testProduct1 = Product.builder()
+                .id(1L)
+                .name("test product 1")
+                .price(BigDecimal.valueOf(10.00))
+                .build();
+        Product testProduct2 = Product.builder()
+                .id(2L)
+                .name("test product 2")
+                .price(BigDecimal.valueOf(20.00))
+                .build();
+        testProducts = productRepository.saveAllAndFlush(List.of(testProduct1, testProduct2));
     }
 
     @Test
@@ -123,5 +139,25 @@ class OrderRepositoryTestSuite {
         //Then
         assertFalse(orderRepository.existsById(orderId));
         assertTrue(userRepository.existsById(userId));
+    }
+
+    @Test
+    void testOrderProductRelation() {
+        //Given
+        Order order = Order.builder()
+                .id(1L)
+                .status("CREATED")
+                .user(testUser)
+                .build();
+        Order savedOrder = orderRepository.saveAndFlush(order);
+        Long orderId = order.getId();
+        Long productId = testProducts.get(0).getId();
+
+        //When
+        orderRepository.deleteById(orderId);
+
+        //Then
+        assertFalse(orderRepository.existsById(orderId));
+        assertTrue(productRepository.existsById(productId));
     }
 }
