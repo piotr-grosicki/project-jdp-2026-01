@@ -16,27 +16,39 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<List<OrderDto>> getAllOrders() {
-        List<OrderDto> orders = List.of(new OrderDto(1L, "CREATED"), new OrderDto(2L, "PAID"));
+        List<OrderDto> orders = List.of(
+                new OrderDto(1L, "CREATED", 10L),
+                new OrderDto(2L, "PAID", 11L)
+        );
         return ResponseEntity.ok(orders);
     }
 
-    @GetMapping(value = "{orderId}")
-    public ResponseEntity<OrderDto> getOrder(@PathVariable Long orderId) throws OrderNotFoundException {
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderDto> getOrder(@PathVariable Long orderId) {
         if (orderId == null || orderId <= 0) {
             throw new OrderNotFoundException();
         }
-        OrderDto order = new OrderDto(orderId, "CREATED");
+        OrderDto order = new OrderDto(orderId, "CREATED", 10L);
         return ResponseEntity.ok(order);
     }
 
-    @DeleteMapping(value = "{orderId}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) throws OrderNotFoundException {
-        return ResponseEntity.noContent().build();
+    @PutMapping("/{orderId}")
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable Long orderId, @RequestBody OrderDto orderDto) {
+        if (orderId == null || orderId <= 0) {
+            throw new OrderNotFoundException(orderId);
+        }
+        OrderDto updatedOrder = new OrderDto(orderId, orderDto.status(), orderDto.userId());
+        return ResponseEntity.ok(updatedOrder);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
-        OrderDto createdOrder = new OrderDto(); // We create empty order. To be revised later.
+        OrderDto createdOrder = new OrderDto(3L, orderDto.status(), orderDto.userId());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+    }
+
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) {
+        return ResponseEntity.noContent().build();
     }
 }
