@@ -1,5 +1,6 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.dto.CreateUpdateCartDto;
 import com.kodilla.ecommercee.dto.CartDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,26 +27,19 @@ public class CartController {
         return ResponseEntity.ok(new CartDto(id, 1L));
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<CartDto> getCartByUserId(@PathVariable Long id) throws CartNotFoundException {
-        return ResponseEntity.ok(new CartDto(id, 1L));
-    }
-
     @PostMapping
-    public ResponseEntity<CartDto> createCart(@RequestBody CartDto cartDto) {
-        return ResponseEntity.ok(new CartDto(1L, 1L));
+    public ResponseEntity<CartDto> createCart(@RequestBody @Valid CreateUpdateCartDto cartDto) {
+        Long idGeneratedAfterAdding = 1L;
+        return ResponseEntity.ok(new CartDto(idGeneratedAfterAdding, cartDto.userId()));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CartDto>  updateCart(@PathVariable Long id,@RequestBody CartDto cartDto) {
-        if (id == null || id <= 0) {
-            throw new OrderNotFoundException(id);
-        }
-        return ResponseEntity.ok(new CartDto(id, 1L));
+    public ResponseEntity<CartDto>  updateCart(@PathVariable Long id,@RequestBody @Valid CreateUpdateCartDto cartDto) {
+        return ResponseEntity.ok(new CartDto(id, cartDto.userId()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CartDto> deleteCart(@PathVariable Long id) {
+    public ResponseEntity<String> deleteCart(@PathVariable Long id) {
         return ResponseEntity.ok().build();
     }
 }
