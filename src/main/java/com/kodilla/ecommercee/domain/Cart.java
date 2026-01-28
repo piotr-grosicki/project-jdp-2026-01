@@ -9,7 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Getter
-@Setter
 @Entity
 @Table(name = "carts")
 public class Cart {
@@ -30,4 +29,14 @@ public class Cart {
     )
     @Builder.Default
     private List<Product> products = new ArrayList<>();
+
+    public void addProduct (Product product) {
+        this.products.add(product);
+    }
+
+    public void setUser (User user) {
+        this.user = user;
+        user.setCart(this);
+    }
+
 }

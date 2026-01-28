@@ -9,7 +9,6 @@ import java.util.List;
 
 @Builder
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -26,6 +25,7 @@ public class Order {
     @JoinColumn (name = "user_id", nullable = false)
     private User user;
 
+    @Builder.Default
     @Column (name = "createdAt")
     private LocalDateTime createdAt = LocalDateTime.now();
 

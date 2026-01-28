@@ -2,17 +2,14 @@ package com.kodilla.ecommercee.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
 @Builder
 @Entity
 @Table(name = "'groups'")
@@ -23,10 +20,11 @@ public class Group {
     private Long id;
 
     @NotNull
+    @Setter
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany (mappedBy = "group", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany (mappedBy = "group", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Product> products;
 
 }

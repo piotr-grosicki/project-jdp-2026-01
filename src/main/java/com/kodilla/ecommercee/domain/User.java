@@ -8,7 +8,6 @@ import java.util.List;
 
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -35,7 +34,7 @@ public class User {
     @Column (name = "sessionKeyExpiresAt")
     private LocalDateTime sessionKeyExpiresAt;
 
-    @OneToOne (mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne (mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
 
     @Builder.Default
