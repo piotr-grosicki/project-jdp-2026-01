@@ -17,17 +17,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 public class CartRepositoryTestSuite {
     @Autowired
-    CartRepository cartRepository;
+    private CartRepository cartRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
-    Cart cart, savedCart, foundCart;
-    User savedUser;
-    Product p1;
+    private Cart cart, savedCart, foundCart;
+    private User savedUser;
+    private Product p1;
 
     @BeforeEach
     public void beforeEach() {
@@ -43,7 +43,7 @@ public class CartRepositoryTestSuite {
     }
 
     @Test
-    void testReadCreatedCartWithProductsAndUser() {
+    public void testReadCreatedCartWithProductsAndUser() {
         //When
         foundCart = cartRepository.findById(savedCart.getId()).orElseThrow();
         //Then
@@ -52,7 +52,7 @@ public class CartRepositoryTestSuite {
     }
 
     @Test
-    void testUpdateCartByAddingProduct() {
+    public void testUpdateCartByAddingProduct() {
         //Given
         foundCart = cartRepository.findById(savedCart.getId()).orElseThrow();
         //When
@@ -66,7 +66,7 @@ public class CartRepositoryTestSuite {
     }
 
     @Test
-    void testDeleteButOnlyCart() {
+    public void testDeleteButOnlyCart() {
         //When
         cartRepository.delete(savedCart);
         cartRepository.flush();
