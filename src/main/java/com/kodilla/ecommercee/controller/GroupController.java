@@ -1,8 +1,9 @@
 package com.kodilla.ecommercee.controller;
 
-import com.kodilla.ecommercee.dto.CreateUpdateGroupDto;
 import com.kodilla.ecommercee.dto.GroupDto;
-import jakarta.validation.Valid;
+import com.kodilla.ecommercee.mappper.GroupMapper;
+import com.kodilla.ecommercee.service.GroupService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,30 +11,31 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/groups")
-//uncomment when GroupService added
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class GroupController {
 
-    //uncomment when GroupService added
-    //private GroupService groupService;
+    private final GroupMapper groupMapper;
+    private GroupService groupService;
 
     @GetMapping
     public ResponseEntity<List<GroupDto>> getAllGroups() {
-        return ResponseEntity.ok(List.of(new GroupDto(1L, "groups list")));
-    };
+        return ResponseEntity.ok(groupMapper.mapToGroupDtoList(groupService.getAllGroups()));
+    }
 
     @PostMapping
-    public ResponseEntity<GroupDto> addGroup(@RequestBody @Valid CreateUpdateGroupDto createUpdateGroupDto) {
-        return ResponseEntity.ok(new GroupDto(1L, createUpdateGroupDto.name()));
-    };
+    public ResponseEntity<GroupDto> addGroup(@RequestBody GroupDto groupDto) {
+        groupService.saveGroup(groupMapper.mapToGroup(groupDto));
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<GroupDto> getGroup(@PathVariable Long id) {
-        return ResponseEntity.ok(new GroupDto(id, "existing group"));
-    };
+        return ResponseEntity.ok(groupMapper.mapToGroupDto(groupService.getGroupById(id)));
+    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GroupDto> updateGroup(@PathVariable Long id, @RequestBody @Valid CreateUpdateGroupDto createUpdateGroupDto) {
-        return ResponseEntity.ok(new GroupDto(id, createUpdateGroupDto.name()));
-    };
+    public ResponseEntity<GroupDto> updateGroup(@PathVariable Long id) {
+        groupService.deleteGroupById(id);
+        return ResponseEntity.ok().build();
+    }
 }
