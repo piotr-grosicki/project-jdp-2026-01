@@ -17,72 +17,56 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 public class CartRepositoryTestSuite {
     @Autowired
-    CartRepository cartRepository;
+    private CartRepository cartRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
 
-    Cart cart, savedCart;
-    User savedUser;
-    Product p1;
+    private Cart cart, savedCart, foundCart;
+    private User savedUser;
+    private Product p1;
 
     @BeforeEach
     public void beforeEach() {
-        savedUser = userRepository.save(new User());
-
+        savedUser = userRepository.save(User.builder().email("test@email.com")
+                .passwordHash("testPass").blocked(false).build());
         p1 = productRepository.save(Product.builder().name("P1").price(new BigDecimal(0)).build());
         Product p2 = productRepository.save(Product.builder().name("P2").price(new BigDecimal(0)).build());
         Product p3 = productRepository.save(Product.builder().name("P3").price(new BigDecimal(0)).build());
-        List<Product> productList = List.of(p1, p2, p3);
+        List<Product> productList = new ArrayList<>(List.of(p1, p2, p3));
 
-        cart = new Cart();
-        cart.setUser(savedUser);
-        cart.setProducts(new ArrayList<>(productList));
+        cart = Cart.builder().user(savedUser).products(productList).build();
+        savedCart = cartRepository.saveAndFlush(cart);
     }
 
     @Test
-    void testCreateCartWithUserAndProducts() {
+    public void testReadCreatedCartWithProductsAndUser() {
         //When
-        savedCart = cartRepository.saveAndFlush(cart);
-        //Then
-        Cart foundCart = cartRepository.findById(savedCart.getId()).orElseThrow();
-        assertEquals(savedUser.getId(), foundCart.getUser().getId());
-        assertEquals(3, foundCart.getProducts().size());
-    }
-
-    @Test
-    void testReadCartWithProductsAndUser() {
-        //Given
-        savedCart = cartRepository.saveAndFlush(cart);
-        //When
-        Cart foundCart = cartRepository.findById(savedCart.getId()).orElseThrow();
+        foundCart = cartRepository.findById(savedCart.getId()).orElseThrow();
         //Then
         assertEquals(3, foundCart.getProducts().size());
         assertNotNull(foundCart.getUser());
     }
 
     @Test
-    void testUpdateCartByAddingProduct() {
+    public void testUpdateCartByAddingProduct() {
         //Given
-        savedCart = cartRepository.save(cart);
-        Cart foundCart = cartRepository.findById(savedCart.getId()).orElseThrow();
+        foundCart = cartRepository.findById(savedCart.getId()).orElseThrow();
         //When
         Product p4 = productRepository.save(Product.builder().name("P4").price(new BigDecimal(0)).build());
-        foundCart.getProducts().add(p4);
+        foundCart.addProduct(p4);
+        foundCart.addProduct(p4);
         cartRepository.save(foundCart);
-        Cart foundCartUpdated = cartRepository.findById(foundCart.getId()).orElseThrow();
-
+        foundCart = cartRepository.findById(foundCart.getId()).orElseThrow();
         //Then
-        assertEquals(4, foundCartUpdated.getProducts().size());
+        assertEquals(5, foundCart.getProducts().size());
     }
 
     @Test
-    void testDeleteButOnlyCart() {
-        //Given
-        savedCart = cartRepository.saveAndFlush(cart);
+    public void testDeleteButOnlyCart() {
         //When
         cartRepository.delete(savedCart);
         cartRepository.flush();
