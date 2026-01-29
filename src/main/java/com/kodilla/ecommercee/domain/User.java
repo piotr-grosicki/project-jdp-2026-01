@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,30 +15,30 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (name = "email", unique = true, nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column (name = "passwordHash", nullable = false)
+    @Column(name = "passwordHash", nullable = false)
     private String passwordHash;
 
     @Setter
-    @Column (name = "blocked", nullable = false)
+    @Column(name = "blocked", nullable = false)
     private boolean blocked;
 
-    @Column (name = "sessionKey")
+    @Column(name = "sessionKey")
     private String sessionKey;
 
-    @Column (name = "sessionKeyExpiresAt")
+    @Column(name = "sessionKeyExpiresAt")
     private LocalDateTime sessionKeyExpiresAt;
 
-    @OneToOne (mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
 
     @Builder.Default
-    @OneToMany (cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "user",  fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders = new ArrayList<>();
 
     public void addOrder(Order order) {
