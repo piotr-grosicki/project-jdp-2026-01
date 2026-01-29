@@ -26,7 +26,7 @@ public class Order {
     private User user;
 
     @Builder.Default
-    @Column (name = "createdAt")
+    @Column (name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToMany (fetch = FetchType.LAZY)
