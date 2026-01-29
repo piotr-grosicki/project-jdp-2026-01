@@ -1,15 +1,5 @@
 package com.kodilla.ecommercee.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-public class OrderDto {
-
-    private Long id;
-    private String status;
-
-}
+public record OrderDto (@NotNull Long id, @NotNull Long userId) {}

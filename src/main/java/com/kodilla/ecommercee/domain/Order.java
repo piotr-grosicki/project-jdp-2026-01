@@ -18,6 +18,7 @@ public class Order {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column (name = "status")
     private String status;
 
