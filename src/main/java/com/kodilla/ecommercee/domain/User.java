@@ -25,6 +25,7 @@ public class User {
     @Column (name = "passwordHash", nullable = false)
     private String passwordHash;
 
+    @Setter
     @Column (name = "blocked", nullable = false)
     private boolean blocked;
 
