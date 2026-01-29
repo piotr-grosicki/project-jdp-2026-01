@@ -1,12 +1,13 @@
 package com.kodilla.ecommercee.controller;
 
 import com.kodilla.ecommercee.dto.ProductDto;
+import com.kodilla.ecommercee.mappper.ProductMapper;
+import com.kodilla.ecommercee.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -14,31 +15,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
 
-    //private final ProductMapper productMapper;
+    private final ProductService productService;
+    private final ProductMapper productMapper;
 
     @GetMapping
     public ResponseEntity<List<ProductDto>> getAllProducts() {
-        return ResponseEntity.ok(new ArrayList<>());
+        return ResponseEntity.ok(productMapper.mapToProductDtoList(productService.getAllProducts()));
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ProductDto> getProduct(@PathVariable Long id) throws ProductNotFoundException {
-        return ResponseEntity.ok(new ProductDto(id,"P1", "D1", new BigDecimal(0), 1L));
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductDto> getProduct(@PathVariable Long id) {
+        return ResponseEntity.ok(productMapper.mapToProductDto(productService.getProduct(id)));
     }
 
     @PostMapping
-    public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto productDto) {
-        return ResponseEntity.ok(new ProductDto(1L, "P1", "D1", new BigDecimal(0), 1L));
+    public ResponseEntity<ProductDto> addProduct(@RequestBody @Valid ProductDto productDto) {
+        return ResponseEntity.ok(productMapper.mapToProductDto(productService.saveProduct(productMapper.mapToProduct(productDto))));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) throws ProductNotFoundException {
-        return ResponseEntity.ok(new ProductDto(id, "P1", "D1", new BigDecimal(0), 1L));
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductDto productDto) {
+        return ResponseEntity.ok(productMapper.mapToProductDto(productService.updateProduct(id, productMapper.mapToProduct(productDto))));
     }
 
-    @DeleteMapping(value="/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) throws ProductNotFoundException {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
         return ResponseEntity.ok().build();
     }
-
 }
