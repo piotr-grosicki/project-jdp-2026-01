@@ -34,7 +34,7 @@ class OrderRepositoryTestSuite {
         testUser = User.builder()
                 .email("est@example.com")
                 .passwordHash("pass")
-                .isBlocked(false)
+                .blocked(false)
                 .build();
         userRepository.saveAndFlush(testUser);
 
