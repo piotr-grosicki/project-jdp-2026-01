@@ -1,9 +1,10 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.dto.OrderDto;
+import com.kodilla.ecommercee.mappper.OrderMapper;
+import com.kodilla.ecommercee.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,41 +15,38 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
 
+    private final OrderService orderService;
+    private final OrderMapper orderMapper;
+
     @GetMapping
     public ResponseEntity<List<OrderDto>> getAllOrders() {
-        List<OrderDto> orders = List.of(
-                new OrderDto(1L, "CREATED", 10L),
-                new OrderDto(2L, "PAID", 11L)
-        );
-        return ResponseEntity.ok(orders);
+        List<Order> orders = orderService.getAllOrders();
+        return ResponseEntity.ok(orderMapper.mapToOrderDtoList(orders));
     }
 
-    @GetMapping("/{orderId}")
+    @GetMapping(value = "{orderId}")
     public ResponseEntity<OrderDto> getOrder(@PathVariable Long orderId) {
-        if (orderId == null || orderId <= 0) {
-            throw new OrderNotFoundException();
-        }
-        OrderDto order = new OrderDto(orderId, "CREATED", 10L);
-        return ResponseEntity.ok(order);
+        Order order = orderService.getOrder(orderId);
+        return ResponseEntity.ok(orderMapper.mapToOrderDto(order));
     }
 
-    @PutMapping("/{orderId}")
+    @PostMapping
+    public ResponseEntity<Void> createOrder(@RequestBody OrderDto orderDto) {
+        Order order = orderMapper.mapToOrder(orderDto);
+        orderService.saveOrder(order);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = "{orderId}")
     public ResponseEntity<OrderDto> updateOrder(@PathVariable Long orderId, @RequestBody OrderDto orderDto) {
-        if (orderId == null || orderId <= 0) {
-            throw new OrderNotFoundException(orderId);
-        }
-        OrderDto updatedOrder = new OrderDto(orderId, orderDto.status(), orderDto.userId());
-        return ResponseEntity.ok(updatedOrder);
+        Order order = orderService.updateOrder(orderId, orderMapper.mapToOrder(orderDto));
+        return ResponseEntity.ok(orderMapper.mapToOrderDto(order));
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
-        OrderDto createdOrder = new OrderDto(3L, orderDto.status(), orderDto.userId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
-    }
-
-    @DeleteMapping("/{orderId}")
+    @DeleteMapping(value = "{orderId}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) {
-        return ResponseEntity.noContent().build();
+        orderService.deleteOrder(orderId);
+        return ResponseEntity.ok().build();
     }
+
 }

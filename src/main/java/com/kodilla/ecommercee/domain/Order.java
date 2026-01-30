@@ -18,6 +18,7 @@ public class Order {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column (name = "status")
     private String status;
 
@@ -26,7 +27,7 @@ public class Order {
     private User user;
 
     @Builder.Default
-    @Column (name = "createdAt")
+    @Column (name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToMany (fetch = FetchType.LAZY)

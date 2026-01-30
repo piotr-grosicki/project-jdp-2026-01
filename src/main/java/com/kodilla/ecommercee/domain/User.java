@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,29 +15,31 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (name = "email", unique = true, nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column (name = "passwordHash", nullable = false)
+    @Column (name = "password_hash", nullable = false)
+    @Setter
     private String passwordHash;
 
-    @Column (name = "blocked", nullable = false)
+    @Setter
+    @Column(name = "blocked", nullable = false)
     private boolean blocked;
 
-    @Column (name = "sessionKey")
+    @Column (name = "session_key")
     private String sessionKey;
 
-    @Column (name = "sessionKeyExpiresAt")
+    @Column (name = "session_key_expires_at")
     private LocalDateTime sessionKeyExpiresAt;
 
-    @OneToOne (mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
 
     @Builder.Default
-    @OneToMany (cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "user",  fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Order> orders = new ArrayList<>();
 
     public void addOrder(Order order) {
@@ -52,8 +53,8 @@ public class User {
     }
 
     public void setCart(Cart cart) {
-        if (cart != null) {
-            this.cart = cart;
+        this.cart = cart;
+        if (cart != null && cart.getUser() != this) {
             cart.setUser(this);
         }
     }

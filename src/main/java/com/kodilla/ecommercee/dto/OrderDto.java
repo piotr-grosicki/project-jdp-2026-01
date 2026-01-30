@@ -1,4 +1,5 @@
 package com.kodilla.ecommercee.dto;
 
-public record OrderDto(Long id, String status, Long userId) {
-}
+import jakarta.validation.constraints.NotNull;
+
+public record OrderDto (@NotNull Long id, @NotNull Long userId) {}

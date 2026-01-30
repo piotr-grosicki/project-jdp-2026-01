@@ -36,7 +36,8 @@ public class Cart {
 
     public void setUser (User user) {
         this.user = user;
-        user.setCart(this);
+        if(user != null && user.getCart() != this) {
+            user.setCart(this);
+        }
     }
-
 }
