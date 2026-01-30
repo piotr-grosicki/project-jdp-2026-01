@@ -22,17 +22,17 @@ public class User {
     @Column (name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column (name = "passwordHash", nullable = false)
+    @Column (name = "password_hash", nullable = false)
     private String passwordHash;
 
     @Setter
     @Column (name = "blocked", nullable = false)
     private boolean blocked;
 
-    @Column (name = "sessionKey")
+    @Column (name = "session_key")
     private String sessionKey;
 
-    @Column (name = "sessionKeyExpiresAt")
+    @Column (name = "session_key_expires_at")
     private LocalDateTime sessionKeyExpiresAt;
 
     @OneToOne (mappedBy = "user", cascade = CascadeType.ALL)
@@ -53,8 +53,8 @@ public class User {
     }
 
     public void setCart(Cart cart) {
-        if (cart != null) {
-            this.cart = cart;
+        this.cart = cart;
+        if (cart != null && cart.getUser() != this) {
             cart.setUser(this);
         }
     }
