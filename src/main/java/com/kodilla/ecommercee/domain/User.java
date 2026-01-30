@@ -22,6 +22,7 @@ public class User {
     private String email;
 
     @Column (name = "password_hash", nullable = false)
+    @Setter
     private String passwordHash;
 
     @Setter
