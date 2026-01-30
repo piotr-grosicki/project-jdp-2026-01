@@ -39,12 +39,10 @@ class OrderRepositoryTestSuite {
         userRepository.saveAndFlush(testUser);
 
         Product testProduct1 = Product.builder()
-                .id(1L)
                 .name("test product 1")
                 .price(BigDecimal.valueOf(10.00))
                 .build();
         Product testProduct2 = Product.builder()
-                .id(2L)
                 .name("test product 2")
                 .price(BigDecimal.valueOf(20.00))
                 .build();
@@ -95,8 +93,8 @@ class OrderRepositoryTestSuite {
                 .status("CREATED")
                 .user(testUser)
                 .build();
-        Order savedOrder = orderRepository.saveAndFlush(createdOrder);
-        Order savedOrder2 = orderRepository.saveAndFlush(paidOrder);
+        orderRepository.saveAndFlush(createdOrder);
+        orderRepository.saveAndFlush(paidOrder);
 
         //When
         List<Order> orders = orderRepository.findAll();
@@ -109,11 +107,11 @@ class OrderRepositoryTestSuite {
     void testDeleteOrder() {
         //Given
         Order order = Order.builder()
-                .id(1L)
                 .status("CREATED")
                 .user(testUser)
                 .build();
-        Long id = order.getId();
+        Order savedOrder = orderRepository.saveAndFlush(order);
+        Long id = savedOrder.getId();
 
         //When
         orderRepository.deleteById(id);
@@ -126,11 +124,11 @@ class OrderRepositoryTestSuite {
     void testOrderUserRelation() {
         //Given
         Order order = Order.builder()
-                .id(1L)
                 .status("CREATED")
                 .user(testUser)
                 .build();
-        Long orderId = order.getId();
+        Order savedOrder = orderRepository.saveAndFlush(order);
+        Long orderId = savedOrder.getId();
         Long userId = testUser.getId();
 
         //When
@@ -145,12 +143,12 @@ class OrderRepositoryTestSuite {
     void testOrderProductRelation() {
         //Given
         Order order = Order.builder()
-                .id(1L)
                 .status("CREATED")
                 .user(testUser)
+                .products(testProducts)
                 .build();
         Order savedOrder = orderRepository.saveAndFlush(order);
-        Long orderId = order.getId();
+        Long orderId = savedOrder.getId();
         Long productId = testProducts.get(0).getId();
 
         //When
