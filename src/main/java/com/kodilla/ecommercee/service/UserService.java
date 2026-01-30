@@ -15,7 +15,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     private String generatePasswordHash(String password) {
-        return BCrypt.withDefaults().hashToString(12, password.toCharArray());
+        return password == null ? null : BCrypt.withDefaults().hashToString(12, password.toCharArray());
     }
 
     public User saveUser(final User user) {
