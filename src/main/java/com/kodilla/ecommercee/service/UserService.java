@@ -1,5 +1,6 @@
 package com.kodilla.ecommercee.service;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.kodilla.ecommercee.controller.UserNotFoundException;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.repository.UserRepository;
@@ -13,7 +14,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private String generatePasswordHash(String password) {
+        return BCrypt.withDefaults().hashToString(12, password.toCharArray());
+    }
+
     public User saveUser(final User user) {
+        String password = user.getPasswordHash();
+        user.setPasswordHash(generatePasswordHash(password));
         return userRepository.save(user);
     }
 
@@ -30,6 +37,11 @@ public class UserService {
         foundUser.setBlocked(user.isBlocked());
         foundUser.getOrders().clear();
         foundUser.getOrders().addAll(user.getOrders());
+        String foundUserPasswordHash = foundUser.getPasswordHash();
+        String newPasswordHash = generatePasswordHash(user.getPasswordHash());
+        if(!foundUserPasswordHash.equals(newPasswordHash)) {
+            foundUser.setPasswordHash(newPasswordHash);
+        }
         return userRepository.save(foundUser);
     }
 
