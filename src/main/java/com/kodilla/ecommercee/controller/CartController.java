@@ -18,28 +18,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartController {
 
-    @Autowired
     private CartService cartService;
 
     @PostMapping
     public ResponseEntity<CartDto> createEmptyCart(@RequestBody @Valid CreateUpdateCartDto cartDto) {
         return ResponseEntity.ok(cartService.createEmptyCart(cartDto));
-    };
+    }
 
     @GetMapping("/{cartId}/products")
     public ResponseEntity<List<ProductDto>> getCartProducts(@PathVariable Long cartId) {
         return ResponseEntity.ok(cartService.getCartProducts(cartId));
-    };
+    }
 
     @PostMapping("/{cartId}/products")
     public ResponseEntity<ProductDto> addProductToCart(@PathVariable Long cartId, @RequestBody @Valid ProductDto productDto) {
         return ResponseEntity.ok(cartService.addProductToCart(cartId, productDto));
-    };
+    }
 
     @PostMapping("/{cartId}/order")
-    public ResponseEntity<OrderDto> addOrderBasedOnCart(@PathVariable Long cartId, OrderDto orderDto) {
+    public ResponseEntity<OrderDto> addOrderBasedOnCart(@PathVariable Long cartId, @RequestBody OrderDto orderDto) {
         return ResponseEntity.ok(cartService.addOrderBasedOnCart(cartId, orderDto));
-    };
+    }
 
     @DeleteMapping("/{cartId}/products/{productId}")
     public ResponseEntity<Void> deleteProductFromCart(@PathVariable Long cartId, @PathVariable Long productId) {
