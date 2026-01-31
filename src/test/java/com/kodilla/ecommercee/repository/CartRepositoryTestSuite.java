@@ -30,12 +30,12 @@ public class CartRepositoryTestSuite {
     private Product p1;
 
     @BeforeEach
-    public void beforeEach() {
+    void setUp() {
         savedUser = userRepository.save(User.builder().email("test@email.com")
                 .passwordHash("testPass").blocked(false).build());
-        p1 = productRepository.save(Product.builder().name("P1").price(new BigDecimal(0)).build());
-        Product p2 = productRepository.save(Product.builder().name("P2").price(new BigDecimal(0)).build());
-        Product p3 = productRepository.save(Product.builder().name("P3").price(new BigDecimal(0)).build());
+        p1 = productRepository.save(Product.builder().name("P1").price(BigDecimal.ZERO).build());
+        Product p2 = productRepository.save(Product.builder().name("P2").price(BigDecimal.ZERO).build());
+        Product p3 = productRepository.save(Product.builder().name("P3").price(BigDecimal.ZERO).build());
         List<Product> productList = new ArrayList<>(List.of(p1, p2, p3));
 
         cart = Cart.builder().user(savedUser).products(productList).build();
@@ -43,7 +43,7 @@ public class CartRepositoryTestSuite {
     }
 
     @Test
-    public void testReadCreatedCartWithProductsAndUser() {
+    void testReadCreatedCartWithProductsAndUser() {
         //When
         foundCart = cartRepository.findById(savedCart.getId()).orElseThrow();
         //Then
@@ -52,11 +52,11 @@ public class CartRepositoryTestSuite {
     }
 
     @Test
-    public void testUpdateCartByAddingProduct() {
+    void testUpdateCartByAddingProduct() {
         //Given
         foundCart = cartRepository.findById(savedCart.getId()).orElseThrow();
         //When
-        Product p4 = productRepository.save(Product.builder().name("P4").price(new BigDecimal(0)).build());
+        Product p4 = productRepository.save(Product.builder().name("P4").price(BigDecimal.ZERO).build());
         foundCart.addProduct(p4);
         foundCart.addProduct(p4);
         cartRepository.save(foundCart);
@@ -66,7 +66,7 @@ public class CartRepositoryTestSuite {
     }
 
     @Test
-    public void testDeleteButOnlyCart() {
+    void testDeleteButOnlyCart() {
         //When
         cartRepository.delete(savedCart);
         cartRepository.flush();
