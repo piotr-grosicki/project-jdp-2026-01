@@ -1,7 +1,9 @@
 package com.kodilla.ecommercee.controller;
 
-public class CartNotFoundException extends RuntimeException {
-    public CartNotFoundException(String message) {
-        super(message);
+import jakarta.persistence.EntityNotFoundException;
+
+public class CartNotFoundException extends EntityNotFoundException {
+    public CartNotFoundException() {
+        super("Cart was not found");
     }
 }

@@ -1,15 +1,11 @@
 package com.kodilla.ecommercee.controller;
 
-import com.kodilla.ecommercee.domain.User;
-import com.kodilla.ecommercee.dto.CreateUserDto;
-import com.kodilla.ecommercee.dto.UpdateUserDto;
 import com.kodilla.ecommercee.dto.UserDto;
-import com.kodilla.ecommercee.mapper.UserMapper;
-import com.kodilla.ecommercee.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -17,39 +13,46 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
-    private final UserMapper userMapper;
+    //private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        return ResponseEntity.ok(
-                userService.getAllUsers()
-                        .stream()
-                        .map(userMapper::mapToUserDto)
-                        .toList()
-        );
-    }
+    public ResponseEntity<List<UserDto>> getAllUsers(){
+        return ResponseEntity.ok(List.of(new UserDto(
+                1L,
+                "email@example.com",
+                false,
+                "session_key",
+                LocalDateTime.now())));
+    };
+
+    @PostMapping
+    public ResponseEntity<UserDto> addUser(@RequestBody @Valid UserDto userDto) {
+        return ResponseEntity.ok(new UserDto(1L,
+                userDto.email(),
+                false,
+                null,
+                null
+        ));
+    };
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userMapper.mapToUserDto(userService.getUser(id)));
-    }
-
-    @PostMapping
-    public ResponseEntity<UserDto> addUser(@RequestBody @Valid CreateUserDto createUserDto) {
-        User savedUser = userService.saveUser(userMapper.mapToUser(createUserDto));
-        return ResponseEntity.ok(userMapper.mapToUserDto(savedUser));
-    }
+        return ResponseEntity.ok(new UserDto(id,
+                "email@example.com",
+                false,
+                "session_key",
+                LocalDateTime.now()
+        ));
+    };
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody @Valid UpdateUserDto updateUserDto) {
-        User updatedUser = userService.updateUser(id, userMapper.mapToUser(updateUserDto, id));
-        return ResponseEntity.ok(userMapper.mapToUserDto(updatedUser));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok().build();
-    }
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
+        return ResponseEntity.ok(new UserDto(id,
+                userDto.email(),
+                userDto.is_blocked(),
+                null,
+                null
+        ));
+    };
 }
+
