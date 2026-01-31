@@ -1,6 +1,7 @@
 package com.kodilla.ecommercee.repository;
 
 import com.kodilla.ecommercee.domain.Order;
+import com.kodilla.ecommercee.domain.OrderStatus;
 import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.domain.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +51,7 @@ class OrderRepositoryTestSuite {
     void testCreateOrder() {
         //Given
         Order order = Order.builder()
-                .status("CREATED")
+                .status(OrderStatus.NEW)
                 .user(testUser)
                 .build();
 
@@ -59,14 +60,14 @@ class OrderRepositoryTestSuite {
 
         //Then
         assertNotNull(savedOrder.getId());
-        assertEquals("CREATED", savedOrder.getStatus());
+        assertEquals(OrderStatus.NEW, savedOrder.getStatus());
     }
 
     @Test
     void testGetOrder() {
         //Given
         Order order = Order.builder()
-                .status("CREATED")
+                .status(OrderStatus.NEW)
                 .user(testUser)
                 .build();
         Order savedOrder = orderRepository.saveAndFlush(order);
@@ -83,11 +84,11 @@ class OrderRepositoryTestSuite {
     void testGetAllOrders() {
         //Given
         Order createdOrder = Order.builder()
-                .status("CREATED")
+                .status(OrderStatus.NEW)
                 .user(testUser)
                 .build();
         Order paidOrder = Order.builder()
-                .status("CREATED")
+                .status(OrderStatus.NEW)
                 .user(testUser)
                 .build();
         orderRepository.saveAndFlush(createdOrder);
@@ -104,7 +105,7 @@ class OrderRepositoryTestSuite {
     void testDeleteOrder() {
         //Given
         Order order = Order.builder()
-                .status("CREATED")
+                .status(OrderStatus.NEW)
                 .user(testUser)
                 .build();
         Order savedOrder = orderRepository.saveAndFlush(order);
@@ -121,7 +122,7 @@ class OrderRepositoryTestSuite {
     void testOrderUserRelation() {
         //Given
         Order order = Order.builder()
-                .status("CREATED")
+                .status(OrderStatus.NEW)
                 .user(testUser)
                 .build();
         Order savedOrder = orderRepository.saveAndFlush(order);
@@ -140,7 +141,7 @@ class OrderRepositoryTestSuite {
     void testOrderProductRelation() {
         //Given
         Order order = Order.builder()
-                .status("CREATED")
+                .status(OrderStatus.NEW)
                 .user(testUser)
                 .products(testProducts)
                 .build();

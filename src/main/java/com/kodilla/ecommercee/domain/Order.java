@@ -20,7 +20,7 @@ public class Order {
 
     @Setter
     @Column (name = "status")
-    private String status;
+    private OrderStatus status;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "user_id", nullable = false)
