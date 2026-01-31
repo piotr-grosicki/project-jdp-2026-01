@@ -4,12 +4,12 @@ import com.kodilla.ecommercee.dto.OrderDto;
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class OrderMapper {
 

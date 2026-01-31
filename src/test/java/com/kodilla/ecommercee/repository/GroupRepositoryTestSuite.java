@@ -15,7 +15,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class GroupCrudTestSuite {
+public class GroupRepositoryTestSuite {
 
     @Autowired private GroupRepository groupRepository;
     @Autowired private ProductRepository productRepository;
