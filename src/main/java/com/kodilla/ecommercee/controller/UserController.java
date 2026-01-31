@@ -4,7 +4,7 @@ import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.dto.CreateUserDto;
 import com.kodilla.ecommercee.dto.UpdateUserDto;
 import com.kodilla.ecommercee.dto.UserDto;
-import com.kodilla.ecommercee.mappper.UserMapper;
+import com.kodilla.ecommercee.mapper.UserMapper;
 import com.kodilla.ecommercee.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

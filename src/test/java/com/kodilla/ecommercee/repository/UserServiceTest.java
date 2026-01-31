@@ -1,8 +1,9 @@
-package com.kodilla.ecommercee.service;
+package com.kodilla.ecommercee.repository;
 
 import com.kodilla.ecommercee.controller.UserNotFoundException;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.repository.UserRepository;
+import com.kodilla.ecommercee.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -27,9 +27,6 @@ dependencies {
     testRuntimeOnly 'com.h2database:h2'
     //hash function (bcrypt)
     implementation 'at.favre.lib:bcrypt:0.10.2'
-    // Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 tasks.named('test') {

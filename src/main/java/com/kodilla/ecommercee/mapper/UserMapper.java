@@ -1,4 +1,4 @@
-package com.kodilla.ecommercee.mappper;
+package com.kodilla.ecommercee.mapper;
 
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.dto.CreateUserDto;
