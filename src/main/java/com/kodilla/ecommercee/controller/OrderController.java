@@ -4,7 +4,9 @@ import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.dto.OrderDto;
 import com.kodilla.ecommercee.mapper.OrderMapper;
 import com.kodilla.ecommercee.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,29 +26,30 @@ public class OrderController {
         return ResponseEntity.ok(orderMapper.mapToOrderDtoList(orders));
     }
 
-    @GetMapping(value = "{orderId}")
-    public ResponseEntity<OrderDto> getOrder(@PathVariable Long orderId) {
-        Order order = orderService.getOrder(orderId);
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDto> getOrder(@PathVariable Long id) {
+        Order order = orderService.getOrder(id);
         return ResponseEntity.ok(orderMapper.mapToOrderDto(order));
     }
 
     @PostMapping
-    public ResponseEntity<Void> createOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity<OrderDto> createOrder(@RequestBody @Valid OrderDto orderDto) {
         Order order = orderMapper.mapToOrder(orderDto);
-        orderService.saveOrder(order);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(orderMapper.mapToOrderDto(orderService.saveOrder(order)));
+
     }
 
-    @PutMapping(value = "{orderId}")
-    public ResponseEntity<OrderDto> updateOrder(@PathVariable Long orderId, @RequestBody OrderDto orderDto) {
-        Order order = orderService.updateOrder(orderId, orderMapper.mapToOrder(orderDto));
+    @PutMapping( "/{id}")
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable Long id, @RequestBody @Valid OrderDto orderDto) {
+        Order order = orderService.updateOrder(id, orderMapper.mapToOrder(orderDto));
         return ResponseEntity.ok(orderMapper.mapToOrderDto(order));
     }
 
-    @DeleteMapping(value = "{orderId}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId) {
-        orderService.deleteOrder(orderId);
-        return ResponseEntity.ok().build();
+    @DeleteMapping( "/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+        orderService.deleteOrder(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
