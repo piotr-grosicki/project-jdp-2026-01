@@ -21,40 +21,42 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class CartService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private CartMapper cartMapper;
+    private final CartMapper cartMapper;
 
-    private ProductMapper productMapper;
+    private final ProductMapper productMapper;
 
-    private OrderMapper orderMapper;
+    private final OrderMapper orderMapper;
 
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    private CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
-    public CartDto createEmptyCart(CartDto cartDto) {
+    public CartDto createEmptyCart(final CartDto cartDto) {
         User user = userRepository.findById(cartDto.userId()).orElseThrow(UserNotFoundException::new);
         Cart cart = Cart.builder().user(user).build();
         cartRepository.save(cart);
         return cartMapper.mapCartToCartDto(cart);
     }
 
-    public List<ProductDto> getCartProducts(Long cartId) {
+    public List<ProductDto> getCartProducts(final Long cartId) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(CartNotFoundException::new);
         return productMapper.mapToProductDtoList(cart.getProducts());
-    };
+    }
 
-    public ProductDto addProductToCart(Long cartId, ProductDto productDto) {
+    public ProductDto addProductToCart(final Long cartId, final ProductDto productDto) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(CartNotFoundException::new);
         Product product = productRepository.findById(productDto.id()).orElseThrow(ProductNotFoundException::new);
         cart.getProducts().add(product);
@@ -62,16 +64,17 @@ public class CartService {
         return productDto;
     }
 
-    public void deleteProductFromCart(Long cartId, Long productId) {
+    public void deleteProductFromCart(final Long cartId, final Long productId) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(CartNotFoundException::new);
         List<Product> cartProducts = cart.getProducts();
-        cartProducts = cartProducts.stream().filter(product -> product.getId() != productId).toList();
+        //https://codingwithharish.com/posts/java-stream-to-mutable-list/
+        cartProducts = cartProducts.stream().filter(product -> product.getId() != productId).collect(Collectors.toCollection(ArrayList::new));
         cart.getProducts().clear();
         cart.getProducts().addAll(cartProducts);
         cartRepository.save(cart);
     }
 
-    public OrderDto addOrderBasedOnCart(Long cartId, OrderDto orderDto) {
+    public OrderDto addOrderBasedOnCart(final Long cartId, final OrderDto orderDto) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(CartNotFoundException::new);
         Order order = orderMapper.mapToOrder(orderDto);
         List<Product> cartProducts = cart.getProducts();
