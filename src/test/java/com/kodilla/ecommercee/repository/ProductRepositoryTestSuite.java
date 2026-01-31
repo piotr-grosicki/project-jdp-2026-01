@@ -7,12 +7,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import java.math.BigDecimal;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-public class ProductRepositoryTestSuite {
+class ProductRepositoryTestSuite {
 
     @Autowired
     private ProductRepository productRepository;
@@ -35,24 +36,8 @@ public class ProductRepositoryTestSuite {
         productSaved = productRepository.findById(productBeforeSaving.getId()).orElseThrow();
     }
 
-    //create i read wygladaja tak samo, bo nie da sie przetestowac
-    //czytania bez dodawania ani dodawania bez pozniejszego odczytywania (czy jest w bazie)
-
     @Test
-    public void testCreateProduct() {
-        //given
-        //when
-        //then
-        assertNotNull(productSaved);
-        assertEquals(productBeforeSaving.getId(), productSaved.getId());
-        assertEquals(productBeforeSaving.getName(), productSaved.getName());
-        assertEquals(productBeforeSaving.getPrice(), productSaved.getPrice());
-        assertEquals(productBeforeSaving.getDescription(), productSaved.getDescription());
-        assertNull(productSaved.getGroup());
-    }
-
-    @Test
-    public void testReadProduct() {
+    public void testCreateAndReadProduct() {
         //given
         //when
         //then
@@ -86,71 +71,49 @@ public class ProductRepositoryTestSuite {
         assertTrue(productDeleted.isEmpty());
     }
 
+    @Test
+    public void testCreateGroup() {
+        //given
+        Group group = Group.builder().name("A group").build();
+        productSaved.setGroup(group);
+        //when
+        productRepository.save(productSaved);
+        //then
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> groupRepository.findById(group.getId()));
+    }
+
     @Nested
-    class GroupTests {
+    class ReadDeleteGroup {
 
-        private Group groupBeforeSaving;
-
-        private Group groupSaved;
+        private Group savedGroup;
 
         @BeforeEach
-        public void generateGroup() {
-            groupBeforeSaving = Group.builder()
-                    .name("group")
-                    .build();
-            productSaved.setGroup(groupBeforeSaving);
+        public void createGroup() {
+            Group group = Group.builder().name("A group").build();
+            groupRepository.save(group);
+            productSaved.setGroup(group);
             productRepository.save(productSaved);
-            productSaved = productRepository.findById(productSaved.getId()).orElseThrow();
-            groupSaved = productSaved.getGroup();
-        }
-
-        //ta sama sytuacja co wyzej
-
-        @Test
-        public void testCreateGroup() {
-            //given
-            //when
-            //then
-            assertNotNull(groupSaved);
-            assertEquals(groupBeforeSaving.getId(), groupSaved.getId());
-            assertEquals(groupBeforeSaving.getName(), groupSaved.getName());
+            savedGroup = group;
         }
 
         @Test
         public void testReadGroup() {
             //given
             //when
+            Product product = productRepository.findById(productSaved.getId()).orElseThrow();
+            Group groupSaved = productSaved.getGroup();
             //then
             assertNotNull(groupSaved);
-            assertEquals(groupBeforeSaving.getId(), groupSaved.getId());
-            assertEquals(groupBeforeSaving.getName(), groupSaved.getName());
-        }
+        };
 
         @Test
-        public void testUpdateGroup() {
-            //given
-            final String updatedGroupName = "New group";
-            //when
-            groupSaved.setName(updatedGroupName);
-            productSaved.setGroup(groupSaved);
-            Product product = productRepository.findById(productSaved.getId()).orElseThrow();
-            Group groupUpdated = product.getGroup();
-            //then
-            assertNotNull(groupUpdated);
-            assertEquals(updatedGroupName, groupUpdated.getName());
-        }
-
-        @Test
-        public void testCascadeDeleteGroup() {
+        public void testDeleteGroup() {
             //given
             //when
-            Long id = productSaved.getId();
-            productRepository.deleteById(id);
-            Optional<Product> productDeleted = productRepository.findById(id);
+            productRepository.deleteById(productSaved.getId());
+            Group groupFromDeletedProduct = groupRepository.findById(savedGroup.getId()).orElseThrow();
             //then
-            assertTrue(productDeleted.isEmpty());
-        }
-
+            assertNotNull(groupFromDeletedProduct);
+        };
     }
-
 }

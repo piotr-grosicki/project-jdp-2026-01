@@ -1,4 +1,8 @@
 package com.kodilla.ecommercee.dto;
 
-public record CartDto(Long id, Long userId) {
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+
+@Builder
+public record CartDto(Long id, @NotNull Long userId) {
 }

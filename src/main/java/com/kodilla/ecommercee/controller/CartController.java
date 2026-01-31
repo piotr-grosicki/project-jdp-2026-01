@@ -1,6 +1,9 @@
 package com.kodilla.ecommercee.controller;
 
 import com.kodilla.ecommercee.dto.CartDto;
+import com.kodilla.ecommercee.dto.OrderDto;
+import com.kodilla.ecommercee.dto.ProductDto;
+import com.kodilla.ecommercee.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,39 +16,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartController {
 
-    // uncomment when cart service
-    // private CartService cartService
-
-    @GetMapping
-    public ResponseEntity<List<CartDto>> getAllCarts() {
-        return ResponseEntity.ok(List.of(new CartDto(1L, 1L)));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<CartDto> getCartById(@PathVariable Long id) throws CartNotFoundException {
-        return ResponseEntity.ok(new CartDto(id, 1L));
-    }
-
-    @GetMapping("/users/{id}")
-    public ResponseEntity<CartDto> getCartByUserId(@PathVariable Long id) throws CartNotFoundException {
-        return ResponseEntity.ok(new CartDto(id, 1L));
-    }
+    private CartService cartService;
 
     @PostMapping
-    public ResponseEntity<CartDto> createCart(@RequestBody CartDto cartDto) {
-        return ResponseEntity.ok(new CartDto(1L, 1L));
+    public ResponseEntity<CartDto> createEmptyCart(@RequestBody @Valid CartDto cartDto) {
+        return ResponseEntity.ok(cartService.createEmptyCart(cartDto));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CartDto>  updateCart(@PathVariable Long id,@RequestBody CartDto cartDto) {
-        if (id == null || id <= 0) {
-            throw new OrderNotFoundException(id);
-        }
-        return ResponseEntity.ok(new CartDto(id, 1L));
+    @GetMapping("/{cartId}/products")
+    public ResponseEntity<List<ProductDto>> getCartProducts(@PathVariable Long cartId) {
+        return ResponseEntity.ok(cartService.getCartProducts(cartId));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<CartDto> deleteCart(@PathVariable Long id) {
+    @PostMapping("/{cartId}/products")
+    public ResponseEntity<ProductDto> addProductToCart(@PathVariable Long cartId, @RequestBody @Valid ProductDto productDto) {
+        return ResponseEntity.ok(cartService.addProductToCart(cartId, productDto));
+    }
+
+    @PostMapping("/{cartId}/order")
+    public ResponseEntity<OrderDto> addOrderBasedOnCart(@PathVariable Long cartId, @RequestBody OrderDto orderDto) {
+        return ResponseEntity.ok(cartService.addOrderBasedOnCart(cartId, orderDto));
+    }
+
+    @DeleteMapping("/{cartId}/products/{productId}")
+    public ResponseEntity<Void> deleteProductFromCart(@PathVariable Long cartId, @PathVariable Long productId) {
+        cartService.deleteProductFromCart(cartId, productId);
         return ResponseEntity.ok().build();
     }
+
 }
