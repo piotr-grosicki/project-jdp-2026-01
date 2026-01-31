@@ -1,13 +1,11 @@
 package com.kodilla.ecommercee.controller;
 
 import com.kodilla.ecommercee.dto.CartDto;
-import com.kodilla.ecommercee.dto.CreateUpdateCartDto;
 import com.kodilla.ecommercee.dto.OrderDto;
 import com.kodilla.ecommercee.dto.ProductDto;
 import com.kodilla.ecommercee.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +19,7 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping
-    public ResponseEntity<CartDto> createEmptyCart(@RequestBody @Valid CreateUpdateCartDto cartDto) {
+    public ResponseEntity<CartDto> createEmptyCart(@RequestBody @Valid CartDto cartDto) {
         return ResponseEntity.ok(cartService.createEmptyCart(cartDto));
     }
 

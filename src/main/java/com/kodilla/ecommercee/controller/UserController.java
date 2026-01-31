@@ -1,7 +1,5 @@
 package com.kodilla.ecommercee.controller;
 
-import com.kodilla.ecommercee.dto.CreateUserDto;
-import com.kodilla.ecommercee.dto.UpdateUserDto;
 import com.kodilla.ecommercee.dto.UserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +26,9 @@ public class UserController {
     };
 
     @PostMapping
-    public ResponseEntity<UserDto> addUser(@RequestBody @Valid CreateUserDto createUserDto) {
+    public ResponseEntity<UserDto> addUser(@RequestBody @Valid UserDto userDto) {
         return ResponseEntity.ok(new UserDto(1L,
-                createUserDto.email(),
+                userDto.email(),
                 false,
                 null,
                 null
@@ -48,10 +46,10 @@ public class UserController {
     };
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody @Valid UpdateUserDto updateUserDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
         return ResponseEntity.ok(new UserDto(id,
-                updateUserDto.email(),
-                updateUserDto.is_blocked(),
+                userDto.email(),
+                userDto.is_blocked(),
                 null,
                 null
         ));

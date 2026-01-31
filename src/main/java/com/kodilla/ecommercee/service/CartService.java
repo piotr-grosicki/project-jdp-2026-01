@@ -8,7 +8,6 @@ import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.domain.User;
 import com.kodilla.ecommercee.dto.CartDto;
-import com.kodilla.ecommercee.dto.CreateUpdateCartDto;
 import com.kodilla.ecommercee.dto.OrderDto;
 import com.kodilla.ecommercee.dto.ProductDto;
 import com.kodilla.ecommercee.mapper.CartMapper;
@@ -44,8 +43,8 @@ public class CartService {
 
     private CartRepository cartRepository;
 
-    public CartDto createEmptyCart(CreateUpdateCartDto createUpdateCartDto) {
-        User user = userRepository.findById(createUpdateCartDto.userId()).orElseThrow(UserNotFoundException::new);
+    public CartDto createEmptyCart(CartDto cartDto) {
+        User user = userRepository.findById(cartDto.userId()).orElseThrow(UserNotFoundException::new);
         Cart cart = Cart.builder().user(user).build();
         cartRepository.save(cart);
         return cartMapper.mapCartToCartDto(cart);
