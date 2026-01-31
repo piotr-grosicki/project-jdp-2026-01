@@ -84,18 +84,38 @@ class ProductRepositoryTestSuite {
         assertThrows(InvalidDataAccessApiUsageException.class, () -> groupRepository.findById(group.getId()));
     }
 
-    @Test
-    public void testReadGroup() {
-        //given
-        Group group = Group.builder().name("A group").build();
-        groupRepository.save(group);
-        productSaved.setGroup(group);
-        productRepository.save(productSaved);
-        //when
-        Product product = productRepository.findById(productSaved.getId()).orElseThrow();
-        Group groupSaved = productSaved.getGroup();
-        //then
-        assertNotNull(groupSaved);
-    };
+    @Nested
+    class ReadDeleteGroup {
 
+        private Group savedGroup;
+
+        @BeforeEach
+        public void createGroup() {
+            Group group = Group.builder().name("A group").build();
+            groupRepository.save(group);
+            productSaved.setGroup(group);
+            productRepository.save(productSaved);
+            savedGroup = group;
+        }
+
+        @Test
+        public void testReadGroup() {
+            //given
+            //when
+            Product product = productRepository.findById(productSaved.getId()).orElseThrow();
+            Group groupSaved = productSaved.getGroup();
+            //then
+            assertNotNull(groupSaved);
+        };
+
+        @Test
+        public void testDeleteGroup() {
+            //given
+            //when
+            productRepository.deleteById(productSaved.getId());
+            Group groupFromDeletedProduct = groupRepository.findById(savedGroup.getId()).orElseThrow();
+            //then
+            assertNotNull(groupFromDeletedProduct);
+        };
+    }
 }
