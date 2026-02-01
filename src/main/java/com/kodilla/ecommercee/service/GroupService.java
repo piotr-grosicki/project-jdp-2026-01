@@ -26,10 +26,10 @@ public class GroupService {
         return groupRepository.save(group);
     }
 
-    public void deleteGroupById(final Long id) {
-        if (!groupRepository.existsById(id)) {
-            throw new GroupNotFoundException();
-        }
-        groupRepository.deleteById(id);
+    public Group updateGroup(final Long id, final Group group) {
+        Group oldGroup = groupRepository.findById(id).orElseThrow(GroupNotFoundException::new);
+        oldGroup.setName(group.getName());
+        return groupRepository.save(oldGroup);
+
     }
 }

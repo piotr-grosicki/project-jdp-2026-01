@@ -1,6 +1,5 @@
 package com.kodilla.ecommercee.service;
 
-import com.kodilla.ecommercee.controller.OrderNotFoundException;
 import com.kodilla.ecommercee.controller.ProductNotFoundException;
 import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.repository.ProductRepository;
@@ -38,8 +37,10 @@ public class ProductService {
     }
 
     public void deleteProduct(final Long id) {
-        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
-        productRepository.delete(product);
+        if(!productRepository.existsById(id) ) {
+            throw new ProductNotFoundException();
+        }
+        productRepository.deleteById(id);
     }
 
 }
