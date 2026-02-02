@@ -1,8 +1,11 @@
 package com.kodilla.ecommercee.controller;
 
+import com.kodilla.ecommercee.domain.Group;
+import com.kodilla.ecommercee.domain.Product;
 import com.kodilla.ecommercee.dto.GroupDto;
 import com.kodilla.ecommercee.mapper.GroupMapper;
 import com.kodilla.ecommercee.service.GroupService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +26,9 @@ public class GroupController {
     }
 
     @PostMapping
-    public ResponseEntity<GroupDto> addGroup(@RequestBody GroupDto groupDto) {
-        groupService.saveGroup(groupMapper.mapToGroup(groupDto));
-        return ResponseEntity.ok().build();
+    public ResponseEntity<GroupDto> addGroup(@RequestBody @Valid GroupDto groupDto) {
+        Group group = groupService.saveGroup(groupMapper.mapToGroup(groupDto));
+        return ResponseEntity.ok(groupMapper.mapToGroupDto(group));
     }
 
     @GetMapping("/{id}")
@@ -34,8 +37,8 @@ public class GroupController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GroupDto> updateGroup(@PathVariable Long id) {
-        groupService.deleteGroupById(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<GroupDto> updateGroup(@PathVariable Long id, @RequestBody @Valid GroupDto groupDto) {
+        Group group = groupService.updateGroup(id, groupMapper.mapToGroup(groupDto));
+        return ResponseEntity.ok(groupMapper.mapToGroupDto(group));
     }
 }

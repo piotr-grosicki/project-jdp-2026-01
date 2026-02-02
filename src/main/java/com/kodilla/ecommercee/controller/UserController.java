@@ -1,9 +1,7 @@
 package com.kodilla.ecommercee.controller;
 
 import com.kodilla.ecommercee.domain.User;
-import com.kodilla.ecommercee.dto.CreateUserDto;
-import com.kodilla.ecommercee.dto.UpdateUserDto;
-import com.kodilla.ecommercee.dto.UserDto;
+import com.kodilla.ecommercee.dto.*;
 import com.kodilla.ecommercee.mapper.UserMapper;
 import com.kodilla.ecommercee.service.UserService;
 import jakarta.validation.Valid;
@@ -19,6 +17,14 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDto loginRequestDto) {
+        String sessionKey = (userService.login(loginRequestDto.email(), loginRequestDto.password()));
+        return ResponseEntity.ok(sessionKey);
+    }
+
 
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers() {

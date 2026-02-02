@@ -29,9 +29,11 @@ public class User {
     @Column(name = "blocked", nullable = false)
     private boolean blocked;
 
+    @Setter
     @Column (name = "session_key")
     private String sessionKey;
 
+    @Setter
     @Column (name = "session_key_expires_at")
     private LocalDateTime sessionKeyExpiresAt;
 

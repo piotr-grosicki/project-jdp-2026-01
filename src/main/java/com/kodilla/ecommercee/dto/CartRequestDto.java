@@ -2,5 +2,5 @@ package com.kodilla.ecommercee.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-public record GroupDto(Long id, @NotNull String name) {
+public record CartRequestDto(@NotNull Long userId) {
 }

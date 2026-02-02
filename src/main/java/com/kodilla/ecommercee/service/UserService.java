@@ -3,10 +3,14 @@ package com.kodilla.ecommercee.service;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.kodilla.ecommercee.controller.UserNotFoundException;
 import com.kodilla.ecommercee.domain.User;
+import com.kodilla.ecommercee.exception.UserNotAuthenticatedException;
 import com.kodilla.ecommercee.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +49,18 @@ public class UserService {
         return userRepository.save(foundUser);
     }
 
+    public String login(final String email, final String password) {
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+
+        if (!user.getPasswordHash().equals(password)) throw new UserNotAuthenticatedException();
+
+        String sessionKey = UUID.randomUUID().toString();
+        user.setSessionKey(sessionKey);
+        user.setSessionKeyExpiresAt(LocalDateTime.now().plusHours(1));
+        userRepository.save(user);
+        return sessionKey;
+    }
+
     public void blockUser(final Long id) {
         User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         foundUser.setBlocked(true);
@@ -52,7 +68,9 @@ public class UserService {
     }
 
     public void deleteUser(final Long id) {
-        User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException();
+        }
         userRepository.deleteById(id);
     }
 }

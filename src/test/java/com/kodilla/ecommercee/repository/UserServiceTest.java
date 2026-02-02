@@ -85,7 +85,7 @@ class UserServiceTest {
 
     @Test
     void testDeleteUser() {
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.existsById(1L)).thenReturn(true);
         doNothing().when(userRepository).deleteById(1L);
 
         userService.deleteUser(1L);

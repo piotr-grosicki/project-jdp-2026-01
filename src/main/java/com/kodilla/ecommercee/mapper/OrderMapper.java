@@ -2,6 +2,7 @@ package com.kodilla.ecommercee.mapper;
 
 import com.kodilla.ecommercee.dto.OrderDto;
 import com.kodilla.ecommercee.domain.Order;
+import com.kodilla.ecommercee.dto.ProductDto;
 import com.kodilla.ecommercee.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,9 +15,11 @@ import java.util.stream.Collectors;
 public class OrderMapper {
 
     private final UserService userService;
+    private final ProductMapper productMapper;
 
-    public OrderDto mapToOrderDto (final Order order) {
-         return new OrderDto(order.getId(), order.getUser().getId());
+    public OrderDto mapToOrderDto(final Order order) {
+        List<ProductDto> productDtos = productMapper.mapToProductDtoList(order.getProducts());
+         return new OrderDto(order.getId(), order.getUser().getId(), order.getStatus(), productDtos);
     }
 
     public Order mapToOrder(final OrderDto orderDto) {

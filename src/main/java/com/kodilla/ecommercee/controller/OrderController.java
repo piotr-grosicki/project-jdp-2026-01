@@ -2,6 +2,7 @@ package com.kodilla.ecommercee.controller;
 
 import com.kodilla.ecommercee.domain.Order;
 import com.kodilla.ecommercee.dto.OrderDto;
+import com.kodilla.ecommercee.dto.UpdateOrderStatusDto;
 import com.kodilla.ecommercee.mapper.OrderMapper;
 import com.kodilla.ecommercee.service.OrderService;
 import jakarta.validation.Valid;
@@ -40,10 +41,10 @@ public class OrderController {
 
     }
 
-    @PutMapping( "/{id}")
-    public ResponseEntity<OrderDto> updateOrder(@PathVariable Long id, @RequestBody @Valid OrderDto orderDto) {
-        Order order = orderService.updateOrder(id, orderMapper.mapToOrder(orderDto));
-        return ResponseEntity.ok(orderMapper.mapToOrderDto(order));
+    @PutMapping( "/{id}/status")
+    public ResponseEntity<OrderDto> updateOrderStatus(@PathVariable Long id, @RequestBody @Valid UpdateOrderStatusDto statusDto) {
+        Order orderUpdated = orderService.updateOrder(id, statusDto.orderStatus());
+        return ResponseEntity.ok(orderMapper.mapToOrderDto(orderUpdated));
     }
 
     @DeleteMapping( "/{id}")
